@@ -1,4 +1,4 @@
-package com.skhojkn.seekhojikan
+package com.skhojkn.seekhojikan.ui.activity
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
