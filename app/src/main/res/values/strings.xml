@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Seekho Jikan</string>
+    <string name="no_internet">You are offline</string>
 </resources>
