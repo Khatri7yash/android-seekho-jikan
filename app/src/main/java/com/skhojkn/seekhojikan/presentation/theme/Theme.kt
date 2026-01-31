@@ -1,6 +1,5 @@
-package com.skhojkn.seekhojikan.ui.theme
+package com.skhojkn.seekhojikan.presentation.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

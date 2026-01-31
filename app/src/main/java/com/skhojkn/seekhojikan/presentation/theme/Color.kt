@@ -1,4 +1,4 @@
-package com.skhojkn.seekhojikan.ui.theme
+package com.skhojkn.seekhojikan.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 

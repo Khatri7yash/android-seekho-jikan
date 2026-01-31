@@ -89,5 +89,5 @@ dependencies {
 
     //Interceptor
     implementation(libs.logging.interceptor)
-//    implementation(libs.okHttp)
+    implementation(libs.okHttp)
 }
