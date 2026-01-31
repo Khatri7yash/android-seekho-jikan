@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.dagger.hilt.android)
+    alias(libs.plugins.google.ksp)
 }
 
 android {
@@ -57,4 +59,35 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+
+    // Hilt
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
+
+    // Hilt Navigation
+    implementation(libs.androidx.hilt.navigation.compose)
+
+    // Splash Screen
+    implementation(libs.androidx.core.splashscreen)
+
+    // Retrofit
+    implementation(libs.com.retrofit2)
+    implementation(libs.gson.converter)
+
+    // Gson
+    implementation(libs.com.google.gson)
+
+    // Room
+    implementation(libs.androidx.room)
+
+    // Navigation
+    implementation(libs.androidx.navigation)
+
+    //Paging
+    implementation(libs.androidx.paging.compose)
+    implementation(libs.androidx.paging.runtime)
+
+    //Interceptor
+    implementation(libs.logging.interceptor)
+//    implementation(libs.okHttp)
 }
