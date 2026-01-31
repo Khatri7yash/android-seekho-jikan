@@ -1,20 +1,18 @@
 package com.skhojkn.seekhojikan.domain.model
 
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.SerialName
+import com.google.gson.annotations.SerializedName
 
-@Serializable
 data class LicensorsItem(
 
-	@SerialName("name")
+	@field:SerializedName("name")
 	val name: String? = null,
 
-	@SerialName("mal_id")
+	@field:SerializedName("mal_id")
 	val malId: Int? = null,
 
-	@SerialName("type")
+	@field:SerializedName("type")
 	val type: String? = null,
 
-	@SerialName("url")
+	@field:SerializedName("url")
 	val url: String? = null
 )

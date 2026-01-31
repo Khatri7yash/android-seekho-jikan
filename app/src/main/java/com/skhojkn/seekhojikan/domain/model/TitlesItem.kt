@@ -1,14 +1,12 @@
 package com.skhojkn.seekhojikan.domain.model
 
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.SerialName
+import com.google.gson.annotations.SerializedName
 
-@Serializable
 data class TitlesItem(
 
-	@SerialName("type")
+	@field:SerializedName("type")
 	val type: String? = null,
 
-	@SerialName("title")
+	@field:SerializedName("title")
 	val title: String? = null
 )

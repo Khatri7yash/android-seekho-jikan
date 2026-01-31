@@ -1,11 +1,9 @@
 package com.skhojkn.seekhojikan.domain.model
 
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.SerialName
+import com.google.gson.annotations.SerializedName
 
-@Serializable
 data class AnimeDetails(
 
-	@SerialName("data")
+	@field:SerializedName("data")
 	val data: Data? = null
 )

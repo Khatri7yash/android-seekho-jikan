@@ -1,20 +1,18 @@
 package com.skhojkn.seekhojikan.domain.model
 
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.SerialName
+import com.google.gson.annotations.SerializedName
 
-@Serializable
 data class Pagination(
 
-	@SerialName("has_next_page")
+	@field:SerializedName("has_next_page")
 	val hasNextPage: Boolean? = null,
 
-	@SerialName("last_visible_page")
+	@field:SerializedName("last_visible_page")
 	val lastVisiblePage: Int? = null,
 
-	@SerialName("items")
+	@field:SerializedName("items")
 	val items: Items? = null,
 
-	@SerialName("current_page")
+	@field:SerializedName("current_page")
 	val currentPage: Int? = null
 )

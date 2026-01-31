@@ -1,20 +1,18 @@
 package com.skhojkn.seekhojikan.domain.model
 
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.SerialName
+import com.google.gson.annotations.SerializedName
 
-@Serializable
 data class Broadcast(
 
-	@SerialName("string")
+	@field:SerializedName("string")
 	val string: String? = null,
 
-	@SerialName("timezone")
+	@field:SerializedName("timezone")
 	val timezone: String? = null,
 
-	@SerialName("time")
+	@field:SerializedName("time")
 	val time: String? = null,
 
-	@SerialName("day")
+	@field:SerializedName("day")
 	val day: String? = null
 )

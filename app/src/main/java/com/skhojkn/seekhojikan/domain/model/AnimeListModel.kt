@@ -1,14 +1,12 @@
 package com.skhojkn.seekhojikan.domain.model
 
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.SerialName
+import com.google.gson.annotations.SerializedName
 
-@Serializable
 data class AnimeListModel(
 
-	@SerialName("pagination")
+	@field:SerializedName("pagination")
 	val pagination: Pagination? = null,
 
-	@SerialName("data")
+	@field:SerializedName("data")
 	val data: List<DataItem?>? = null
 )

@@ -50,6 +50,6 @@ class APIModule {
                 val requestBuilder = chain.request().newBuilder()
                 chain.proceed(requestBuilder.build())
             }
-//            .addInterceptor(loggingInterceptor)
+            .addInterceptor(loggingInterceptor)
             .build()
 }

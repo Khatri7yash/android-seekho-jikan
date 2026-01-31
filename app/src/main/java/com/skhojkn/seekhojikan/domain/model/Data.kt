@@ -1,116 +1,114 @@
 package com.skhojkn.seekhojikan.domain.model
 
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.SerialName
+import com.google.gson.annotations.SerializedName
 
-@Serializable
 data class Data(
 
-	@SerialName("title_japanese")
+	@field:SerializedName("title_japanese")
 	val titleJapanese: String? = null,
 
-	@SerialName("favorites")
+	@field:SerializedName("favorites")
 	val favorites: Int? = null,
 
-	@SerialName("broadcast")
+	@field:SerializedName("broadcast")
 	val broadcast: Broadcast? = null,
 
-	@SerialName("year")
+	@field:SerializedName("year")
 	val year: Int? = null,
 
-	@SerialName("rating")
+	@field:SerializedName("rating")
 	val rating: String? = null,
 
-	@SerialName("scored_by")
+	@field:SerializedName("scored_by")
 	val scoredBy: Int? = null,
 
-	@SerialName("title_synonyms")
+	@field:SerializedName("title_synonyms")
 	val titleSynonyms: List<String?>? = null,
 
-	@SerialName("source")
+	@field:SerializedName("source")
 	val source: String? = null,
 
-	@SerialName("title")
+	@field:SerializedName("title")
 	val title: String? = null,
 
-	@SerialName("type")
+	@field:SerializedName("type")
 	val type: String? = null,
 
-	@SerialName("trailer")
+	@field:SerializedName("trailer")
 	val trailer: Trailer? = null,
 
-	@SerialName("duration")
+	@field:SerializedName("duration")
 	val duration: String? = null,
 
-	@SerialName("score")
+	@field:SerializedName("score")
 	val score: Any? = null,
 
-	@SerialName("themes")
+	@field:SerializedName("themes")
 	val themes: List<Any?>? = null,
 
-	@SerialName("approved")
+	@field:SerializedName("approved")
 	val approved: Boolean? = null,
 
-	@SerialName("genres")
+	@field:SerializedName("genres")
 	val genres: List<GenresItem?>? = null,
 
-	@SerialName("popularity")
+	@field:SerializedName("popularity")
 	val popularity: Int? = null,
 
-	@SerialName("members")
+	@field:SerializedName("members")
 	val members: Int? = null,
 
-	@SerialName("title_english")
+	@field:SerializedName("title_english")
 	val titleEnglish: String? = null,
 
-	@SerialName("rank")
+	@field:SerializedName("rank")
 	val rank: Int? = null,
 
-	@SerialName("season")
+	@field:SerializedName("season")
 	val season: String? = null,
 
-	@SerialName("airing")
+	@field:SerializedName("airing")
 	val airing: Boolean? = null,
 
-	@SerialName("episodes")
+	@field:SerializedName("episodes")
 	val episodes: Int? = null,
 
-	@SerialName("aired")
+	@field:SerializedName("aired")
 	val aired: Aired? = null,
 
-	@SerialName("images")
+	@field:SerializedName("images")
 	val images: Images? = null,
 
-	@SerialName("studios")
+	@field:SerializedName("studios")
 	val studios: List<StudiosItem?>? = null,
 
-	@SerialName("mal_id")
+	@field:SerializedName("mal_id")
 	val malId: Int? = null,
 
-	@SerialName("titles")
+	@field:SerializedName("titles")
 	val titles: List<TitlesItem?>? = null,
 
-	@SerialName("synopsis")
+	@field:SerializedName("synopsis")
 	val synopsis: String? = null,
 
-	@SerialName("explicit_genres")
+	@field:SerializedName("explicit_genres")
 	val explicitGenres: List<Any?>? = null,
 
-	@SerialName("licensors")
+	@field:SerializedName("licensors")
 	val licensors: List<Any?>? = null,
 
-	@SerialName("url")
+	@field:SerializedName("url")
 	val url: String? = null,
 
-	@SerialName("producers")
+	@field:SerializedName("producers")
 	val producers: List<ProducersItem?>? = null,
 
-	@SerialName("background")
+	@field:SerializedName("background")
 	val background: String? = null,
 
-	@SerialName("status")
+	@field:SerializedName("status")
 	val status: String? = null,
 
-	@SerialName("demographics")
+	@field:SerializedName("demographics")
 	val demographics: List<DemographicsItem?>? = null
 )

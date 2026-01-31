@@ -1,29 +1,27 @@
 package com.skhojkn.seekhojikan.domain.model
 
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.SerialName
+import com.google.gson.annotations.SerializedName
 
-@Serializable
 data class Images(
 
-	@SerialName("jpg")
+	@field:SerializedName("jpg")
 	val jpg: Jpg? = null,
 
-	@SerialName("webp")
+	@field:SerializedName("webp")
 	val webp: Webp? = null,
 
-	@SerialName("large_image_url")
+	@field:SerializedName("large_image_url")
 	val largeImageUrl: Any? = null,
 
-	@SerialName("small_image_url")
+	@field:SerializedName("small_image_url")
 	val smallImageUrl: Any? = null,
 
-	@SerialName("image_url")
+	@field:SerializedName("image_url")
 	val imageUrl: Any? = null,
 
-	@SerialName("medium_image_url")
+	@field:SerializedName("medium_image_url")
 	val mediumImageUrl: Any? = null,
 
-	@SerialName("maximum_image_url")
+	@field:SerializedName("maximum_image_url")
 	val maximumImageUrl: Any? = null
 )

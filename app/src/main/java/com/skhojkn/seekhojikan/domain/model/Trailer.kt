@@ -1,20 +1,18 @@
 package com.skhojkn.seekhojikan.domain.model
 
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.SerialName
+import com.google.gson.annotations.SerializedName
 
-@Serializable
 data class Trailer(
 
-	@SerialName("images")
+	@field:SerializedName("images")
 	val images: Images? = null,
 
-	@SerialName("embed_url")
+	@field:SerializedName("embed_url")
 	val embedUrl: String? = null,
 
-	@SerialName("youtube_id")
+	@field:SerializedName("youtube_id")
 	val youtubeId: Any? = null,
 
-	@SerialName("url")
+	@field:SerializedName("url")
 	val url: Any? = null
 )

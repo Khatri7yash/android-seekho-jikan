@@ -1,17 +1,15 @@
 package com.skhojkn.seekhojikan.domain.model
 
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.SerialName
+import com.google.gson.annotations.SerializedName
 
-@Serializable
 data class Items(
 
-	@SerialName("per_page")
+	@field:SerializedName("per_page")
 	val perPage: Int? = null,
 
-	@SerialName("total")
+	@field:SerializedName("total")
 	val total: Int? = null,
 
-	@SerialName("count")
+	@field:SerializedName("count")
 	val count: Int? = null
 )

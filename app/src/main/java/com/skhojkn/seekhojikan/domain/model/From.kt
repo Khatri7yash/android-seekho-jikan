@@ -1,17 +1,15 @@
 package com.skhojkn.seekhojikan.domain.model
 
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.SerialName
+import com.google.gson.annotations.SerializedName
 
-@Serializable
 data class From(
 
-	@SerialName("month")
+	@field:SerializedName("month")
 	val month: Int? = null,
 
-	@SerialName("year")
+	@field:SerializedName("year")
 	val year: Int? = null,
 
-	@SerialName("day")
+	@field:SerializedName("day")
 	val day: Int? = null
 )

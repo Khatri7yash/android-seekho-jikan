@@ -1,20 +1,18 @@
 package com.skhojkn.seekhojikan.domain.model
 
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.SerialName
+import com.google.gson.annotations.SerializedName
 
-@Serializable
 data class Aired(
 
-	@SerialName("string")
+	@field:SerializedName("string")
 	val string: String? = null,
 
-	@SerialName("prop")
+	@field:SerializedName("prop")
 	val prop: Prop? = null,
 
-	@SerialName("from")
+	@field:SerializedName("from")
 	val from: String? = null,
 
-	@SerialName("to")
+	@field:SerializedName("to")
 	val to: Any? = null
 )

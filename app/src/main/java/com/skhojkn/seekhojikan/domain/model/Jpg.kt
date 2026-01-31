@@ -1,17 +1,15 @@
 package com.skhojkn.seekhojikan.domain.model
 
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.SerialName
+import com.google.gson.annotations.SerializedName
 
-@Serializable
 data class Jpg(
 
-	@SerialName("large_image_url")
+	@field:SerializedName("large_image_url")
 	val largeImageUrl: String? = null,
 
-	@SerialName("small_image_url")
+	@field:SerializedName("small_image_url")
 	val smallImageUrl: String? = null,
 
-	@SerialName("image_url")
+	@field:SerializedName("image_url")
 	val imageUrl: String? = null
 )

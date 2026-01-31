@@ -1,14 +1,12 @@
 package com.skhojkn.seekhojikan.domain.model
 
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.SerialName
+import com.google.gson.annotations.SerializedName
 
-@Serializable
 data class Prop(
 
-	@SerialName("from")
+	@field:SerializedName("from")
 	val from: From? = null,
 
-	@SerialName("to")
+	@field:SerializedName("to")
 	val to: To? = null
 )
