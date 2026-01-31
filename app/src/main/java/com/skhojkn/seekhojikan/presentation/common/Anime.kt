@@ -180,7 +180,7 @@ fun AnimeCard(
                 Text(
                     text = "★ ${item.score ?: "N/A"}",
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color.Yellow // Rating stands out
+                    color = Color.Yellow
                 )
             }
         }

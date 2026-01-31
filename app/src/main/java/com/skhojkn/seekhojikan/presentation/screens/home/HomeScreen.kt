@@ -47,7 +47,7 @@ fun HomeContentScreen(navigation: (Screen?, Array<out Any>?) -> Unit, uiState: R
     ){
         BaseColumn(uiState, Modifier) {
             Anime(items, onclick = { animeItem ->
-
+                navigation(Screen.AnimeDetailsScreen, arrayOf(animeItem.malId.toString()))
             })
         }
     }

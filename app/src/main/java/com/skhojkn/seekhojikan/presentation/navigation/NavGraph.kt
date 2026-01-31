@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.skhojkn.seekhojikan.presentation.screens.details.AnimeDetailsScreen
 import com.skhojkn.seekhojikan.presentation.screens.home.MainScreen
 
 val LocalCurrentRoute = (compositionLocalOf<String?> { null })
@@ -29,6 +30,18 @@ fun Navigation() {
             composable(Screen.HomeScreen.route) {
                 MainScreen { navigation, args ->
                     navController navigateRoute (NavigationData(navigation, args))
+                }
+            }
+//            composable(Screen.AnimeDetailsScreen.route) {  backStackEntry ->
+            composable(Screen.AnimeDetailsScreen.route.plus(Screen.AnimeDetailsScreen.argsName.joinToString { navArgument -> navArgument.name })) {  backStackEntry ->
+                val key = Screen.AnimeDetailsScreen.argsName[0].name.substringAfter("{")
+                        .substringBefore("}")
+
+                val animeId = backStackEntry.arguments?.getString(key)?.toInt()
+                animeId?.let { id ->
+                    AnimeDetailsScreen(animeID = id) { navigation, args ->
+                        navController navigateRoute (NavigationData(navigation, args))
+                    }
                 }
             }
         }
