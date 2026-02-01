@@ -12,8 +12,8 @@ interface APIServices {
     suspend fun getTopAnime(): AnimeListModel
 
     @GET(ApiURL.VERSION_V4.plus(ApiURL.ANIME_DETAILS_ENDPOINT))
-    suspend fun fetchAnimeDetails(
-        @Path("anime_id") animeId: Int
+    suspend fun getAnimeDetails(
+        @Path("anime_id") animeId: String
     ): AnimeDetails
 
 }

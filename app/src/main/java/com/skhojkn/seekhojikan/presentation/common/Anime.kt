@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -18,7 +17,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.skhojkn.seekhojikan.R
+import com.skhojkn.seekhojikan.data.local.entity.AnimeEntity
 import com.skhojkn.seekhojikan.domain.model.DataItem
 import com.skhojkn.seekhojikan.presentation.theme.PurpleGrey40
 import com.skydoves.landscapist.ImageOptions
@@ -43,8 +42,8 @@ import com.skydoves.landscapist.placeholder.shimmer.ShimmerPlugin
 
 @Composable
 fun Anime(
-    items: List<DataItem?>?,
-    onclick: (DataItem) -> Unit
+    items: List<AnimeEntity?>,
+    onclick: (AnimeEntity) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -59,8 +58,8 @@ fun Anime(
 
 @Composable
 fun DisplayAnime(
-    items: List<DataItem?>?,
-    onclick: (DataItem) -> Unit
+    items: List<AnimeEntity?>?,
+    onclick: (AnimeEntity) -> Unit
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -86,8 +85,8 @@ fun DisplayAnime(
 @Composable
 fun AnimeCard(
     modifier: Modifier = Modifier,
-    item: DataItem,
-    onclick: (DataItem) -> Unit
+    item: AnimeEntity,
+    onclick: (AnimeEntity) -> Unit
 ) {
     Box(
         modifier = modifier
@@ -98,7 +97,7 @@ fun AnimeCard(
     ) {
 
         GlideImage(
-            imageModel = { item.images?.jpg?.imageUrl },
+            imageModel = { item.imageUrl },
             modifier = Modifier.fillMaxSize(),
             imageOptions = ImageOptions(
                 contentScale = ContentScale.Crop,
@@ -130,7 +129,7 @@ fun AnimeCard(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = item.titleEnglish ?: "Unknown",
+                        text = item.title ?: "Unknown",
                         color = Color.White,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(8.dp)
@@ -156,7 +155,7 @@ fun AnimeCard(
                 .padding(10.dp)
         ) {
             Text(
-                text = item.titleEnglish ?: item.title ?: "No Title",
+                text = item.title,
                 style = MaterialTheme.typography.titleMedium,
                 color = Color.White,
                 maxLines = 1,
@@ -180,7 +179,7 @@ fun AnimeCard(
                 Text(
                     text = "★ ${item.score ?: "N/A"}",
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color.Yellow // Rating stands out
+                    color = Color.Yellow
                 )
             }
         }

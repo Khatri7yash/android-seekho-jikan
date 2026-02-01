@@ -80,6 +80,11 @@ dependencies {
     // Room
     implementation(libs.androidx.room)
 
+    implementation(libs.androidx.room.ktx)
+
+    // IMPORTANT: The compiler that generates AppDatabase_Impl
+    ksp(libs.androidx.room.compiler)
+
     // Navigation
     implementation(libs.androidx.navigation)
 
@@ -92,10 +97,12 @@ dependencies {
     implementation(libs.okHttp)
 
     // Landscapist Glide for Compose
-    implementation("com.github.skydoves:landscapist-glide:2.3.2")
+    implementation(libs.landscapist.glide)
 
     // For the Shimmer effect
-    implementation("com.github.skydoves:landscapist-placeholder:2.3.2")
+    implementation(libs.landscapist.placeholder)
 
+    //YT Player
+    implementation(libs.androidyoutubeplayer.core)
 
 }
