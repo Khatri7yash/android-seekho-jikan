@@ -1,6 +1,5 @@
 package com.skhojkn.seekhojikan.presentation.screens.details
 
-import androidx.annotation.OptIn
 import androidx.compose.foundation.MarqueeAnimationMode
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.border
@@ -22,10 +21,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,9 +35,7 @@ import androidx.compose.ui.graphics.BlurEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.boundsInParent
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
@@ -50,9 +44,6 @@ import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.media3.common.MediaItem
-import androidx.media3.common.Player
-import androidx.media3.exoplayer.ExoPlayer
 import com.skhojkn.seekhojikan.domain.model.AnimeDetails
 import com.skhojkn.seekhojikan.domain.usecase.network.Result
 import com.skhojkn.seekhojikan.presentation.common.BaseColumn
@@ -69,10 +60,6 @@ import com.skydoves.landscapist.components.rememberImageComponent
 import com.skydoves.landscapist.glide.GlideImage
 import com.skydoves.landscapist.placeholder.shimmer.Shimmer
 import com.skydoves.landscapist.placeholder.shimmer.ShimmerPlugin
-import androidx.core.net.toUri
-import androidx.media3.common.util.UnstableApi
-import androidx.media3.ui.AspectRatioFrameLayout
-import androidx.media3.ui.PlayerView
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
@@ -105,39 +92,11 @@ private fun AnimeDetails(
     navigation: (Screen?, Array<out Any>?) -> Unit = { nav, arr ->
     }
 ) {
-    val context = LocalContext.current
     val density = LocalDensity.current
     var bHeightPx by remember { mutableStateOf(0f) }
     var posterWidth by remember { mutableStateOf(0f) }
     var hasTrailer by remember { mutableStateOf(false) }
     val title by remember { mutableStateOf("Anime Details") }
-
-    val exoPlayer = remember {
-        ExoPlayer.Builder(context).build().apply {
-            repeatMode = Player.REPEAT_MODE_ONE
-            playWhenReady = true
-        }
-    }
-
-//    DisposableEffect(animeDetailsState) {
-//        if (animeDetailsState is Result.Success) {
-//            val videoId = extractYoutubeId(animeDetailsState.data.data?.trailer?.embedUrl)
-//            val videoUrl =
-//                animeDetailsState.data.data?.trailer?.embedUrl
-////            videoUrl?.let {
-////                hasTrailer = true
-////                val mediaItem = MediaItem.fromUri(videoUrl.toUri())
-////                exoPlayer.setMediaItem(mediaItem)
-////                exoPlayer.prepare()
-////            }
-//            videoId?.let {
-//                hasTrailer = true
-//            }
-//        }
-//        onDispose { exoPlayer.release() }
-//    }
-
-
 
     BaseScreen(
         title = title,
@@ -161,8 +120,6 @@ private fun AnimeDetails(
 
                         PosterView(
                             details,
-                            hasTrailer,
-                            exoPlayer,
                             onHeightMeasured = { measuredHeight ->
                                 bHeightPx = measuredHeight
                             })
@@ -298,10 +255,9 @@ private fun AnimeDetails(
     }
 }
 
-@OptIn(UnstableApi::class)
 @Composable
 fun PosterView(
-    details: Data?, hasTrailer: Boolean, exoPlayer: ExoPlayer,
+    details: Data?,
     onHeightMeasured: (Float) -> Unit
 ) {
 
@@ -342,29 +298,10 @@ fun PosterView(
                 .fillMaxWidth()
                 .aspectRatio(3f / 2f)
                 .graphicsLayer {
-                renderEffect = BlurEffect(5f, 5f) // Keeps your blur effect
+                renderEffect = BlurEffect(5f, 5f)
                 alpha = 0.9f
             }
         )
-//        AndroidView(
-//            factory = { ctx ->
-//                PlayerView(ctx).apply {
-//                    player = exoPlayer
-//                    useController = false // Hide play/pause buttons
-//                    resizeMode = AspectRatioFrameLayout.RESIZE_MODE_ZOOM
-//                }
-//            },
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .aspectRatio(3f / 2f)
-//                .graphicsLayer {
-//                    alpha = 0.9f
-//                    renderEffect = BlurEffect(5f, 5f) // Keeps your blur effect
-//                }
-//                .onGloballyPositioned { coords ->
-//                    onHeightMeasured(coords.boundsInParent().height)
-//                }
-//        )
     } else {
         GlideImage(
             modifier = modifier
@@ -380,10 +317,7 @@ fun PosterView(
                     ambientShadowColor = Color.Black
                     spotShadowColor = Color.Black
                     renderEffect = BlurEffect(5f, 5f)
-                }/*
-                .onGloballyPositioned { coords ->
-                    onHeightMeasured(coords.boundsInParent().height)
-                }*/,
+                },
             imageModel = { details?.images?.jpg?.imageUrl },
             imageOptions = ImageOptions(
                 contentScale = ContentScale.Crop
