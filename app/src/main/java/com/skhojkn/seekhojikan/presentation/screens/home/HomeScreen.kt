@@ -9,6 +9,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.skhojkn.seekhojikan.data.local.entity.AnimeEntity
 import com.skhojkn.seekhojikan.domain.model.DataItem
 import com.skhojkn.seekhojikan.domain.usecase.network.Result
 import com.skhojkn.seekhojikan.presentation.common.Anime
@@ -21,7 +22,7 @@ import com.skhojkn.seekhojikan.presentation.navigation.Screen
 fun MainScreen(navigation: (Screen?, Array<out Any>?) -> Unit) {
     val viewModel = hiltViewModel<HomeScreenViewModel>()
     val uiState by viewModel.uiState.collectAsState()
-    var itemList: List<DataItem?>? by remember { mutableStateOf<List<DataItem?>?>(emptyList()) }
+    var itemList: List<AnimeEntity?> by remember { mutableStateOf<List<AnimeEntity?>>(emptyList()) }
 
     LaunchedEffect(Unit) {
         viewModel.getTopAnime()
@@ -29,7 +30,7 @@ fun MainScreen(navigation: (Screen?, Array<out Any>?) -> Unit) {
 
     LaunchedEffect(uiState) {
         if(uiState is Result.Success){
-            itemList = (uiState as Result.Success).data.data
+            itemList = (uiState as Result.Success).data
         }
     }
 
@@ -40,7 +41,7 @@ fun MainScreen(navigation: (Screen?, Array<out Any>?) -> Unit) {
 }
 
 @Composable
-fun HomeContentScreen(navigation: (Screen?, Array<out Any>?) -> Unit, uiState: Result<Any>, items: List<DataItem?>?){
+fun HomeContentScreen(navigation: (Screen?, Array<out Any>?) -> Unit, uiState: Result<Any>, items: List<AnimeEntity?>){
     BaseScreen(
         title = "Anime",
         navigation

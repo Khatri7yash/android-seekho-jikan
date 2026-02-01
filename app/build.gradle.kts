@@ -80,6 +80,11 @@ dependencies {
     // Room
     implementation(libs.androidx.room)
 
+    implementation(libs.androidx.room.ktx)
+
+    // IMPORTANT: The compiler that generates AppDatabase_Impl
+    ksp(libs.androidx.room.compiler)
+
     // Navigation
     implementation(libs.androidx.navigation)
 

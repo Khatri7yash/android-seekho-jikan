@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.paging.cachedIn
+import com.skhojkn.seekhojikan.data.local.entity.AnimeEntity
 import com.skhojkn.seekhojikan.domain.model.AnimeListModel
 import com.skhojkn.seekhojikan.domain.repository.AnimeListRepository
 import com.skhojkn.seekhojikan.domain.usecase.TopAnimeListUseCase
@@ -24,8 +25,9 @@ class HomeScreenViewModel @Inject constructor(
     val topAnimeListUseCase: TopAnimeListUseCase
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<Result<AnimeListModel>>(Result.Loading)
-    val uiState: StateFlow<Result<AnimeListModel>> = _uiState.asStateFlow()
+//    Flow<Result<List<AnimeEntity?>>>
+    private val _uiState = MutableStateFlow<Result<List<AnimeEntity?>>>(Result.Loading)
+    val uiState: StateFlow<Result<List<AnimeEntity?>>> = _uiState.asStateFlow()
 
     suspend fun getTopAnime(): StateFlow<Result<Any>> = suspendCoroutine { continuation ->
         viewModelScope.launch {
