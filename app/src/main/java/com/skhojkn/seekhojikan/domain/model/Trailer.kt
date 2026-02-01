@@ -14,5 +14,5 @@ data class Trailer(
 	val youtubeId: Any? = null,
 
 	@field:SerializedName("url")
-	val url: Any? = null
+	val url: String? = null
 )

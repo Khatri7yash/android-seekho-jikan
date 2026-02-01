@@ -1,5 +1,6 @@
 package com.skhojkn.seekhojikan.presentation.screens.details
 
+import androidx.annotation.OptIn
 import androidx.compose.foundation.MarqueeAnimationMode
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.border
@@ -15,19 +16,21 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,13 +41,18 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.boundsInParent
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
+import androidx.media3.exoplayer.ExoPlayer
 import com.skhojkn.seekhojikan.domain.model.AnimeDetails
 import com.skhojkn.seekhojikan.domain.usecase.network.Result
 import com.skhojkn.seekhojikan.presentation.common.BaseColumn
@@ -53,7 +61,6 @@ import com.skhojkn.seekhojikan.presentation.common.textui.ExpandableText
 import com.skhojkn.seekhojikan.presentation.common.textui.SubtitlePrimary
 import com.skhojkn.seekhojikan.presentation.common.textui.SubtitleSecondary
 import com.skhojkn.seekhojikan.presentation.navigation.Screen
-import com.skhojkn.seekhojikan.presentation.theme.Purple40
 import com.skhojkn.seekhojikan.presentation.theme.pinkColor
 import com.skhojkn.seekhojikan.presentation.theme.starColor
 import com.skhojkn.seekhojikan.presentation.utils.annotation.ThemePreview
@@ -62,6 +69,17 @@ import com.skydoves.landscapist.components.rememberImageComponent
 import com.skydoves.landscapist.glide.GlideImage
 import com.skydoves.landscapist.placeholder.shimmer.Shimmer
 import com.skydoves.landscapist.placeholder.shimmer.ShimmerPlugin
+import androidx.core.net.toUri
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.ui.AspectRatioFrameLayout
+import androidx.media3.ui.PlayerView
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+import com.skhojkn.seekhojikan.domain.model.Data
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -87,19 +105,47 @@ private fun AnimeDetails(
     navigation: (Screen?, Array<out Any>?) -> Unit = { nav, arr ->
     }
 ) {
-
-
+    val context = LocalContext.current
     val density = LocalDensity.current
     var bHeightPx by remember { mutableStateOf(0f) }
     var posterWidth by remember { mutableStateOf(0f) }
+    var hasTrailer by remember { mutableStateOf(false) }
     val title by remember { mutableStateOf("Anime Details") }
+
+    val exoPlayer = remember {
+        ExoPlayer.Builder(context).build().apply {
+            repeatMode = Player.REPEAT_MODE_ONE
+            playWhenReady = true
+        }
+    }
+
+//    DisposableEffect(animeDetailsState) {
+//        if (animeDetailsState is Result.Success) {
+//            val videoId = extractYoutubeId(animeDetailsState.data.data?.trailer?.embedUrl)
+//            val videoUrl =
+//                animeDetailsState.data.data?.trailer?.embedUrl
+////            videoUrl?.let {
+////                hasTrailer = true
+////                val mediaItem = MediaItem.fromUri(videoUrl.toUri())
+////                exoPlayer.setMediaItem(mediaItem)
+////                exoPlayer.prepare()
+////            }
+//            videoId?.let {
+//                hasTrailer = true
+//            }
+//        }
+//        onDispose { exoPlayer.release() }
+//    }
+
+
+
     BaseScreen(
         title = title,
         navigation = navigation
     ) {
         BaseColumn(state = animeDetailsState) {
             if (animeDetailsState is Result.Success) {
-                val details = animeDetailsState.data?.data
+                val details = animeDetailsState.data.data
                 Column(
                     modifier =
                         Modifier
@@ -112,29 +158,15 @@ private fun AnimeDetails(
                             .wrapContentHeight()
                             .fillMaxWidth()
                     ) {
-                        GlideImage(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .aspectRatio(3f / 2f)
-                                .graphicsLayer {
-                                    alpha = 0.9f
-                                    scaleX = 1f
-                                    scaleY = 1f
-                                    translationX = 0f
-                                    translationY = 0f
-                                    shadowElevation = 10f
-                                    ambientShadowColor = Color.Black
-                                    spotShadowColor = Color.Black
-                                    renderEffect = BlurEffect(5f, 5f)
-                                }
-                                .onGloballyPositioned { coords ->
-                                    bHeightPx = coords.boundsInParent().height
-                                },
-                            imageModel = { details?.images?.jpg?.imageUrl },
-                            imageOptions = ImageOptions(
-                                contentScale = ContentScale.Crop
-                            )
-                        )
+
+                        PosterView(
+                            details,
+                            hasTrailer,
+                            exoPlayer,
+                            onHeightMeasured = { measuredHeight ->
+                                bHeightPx = measuredHeight
+                            })
+
                         val bgHeight = with(density) { bHeightPx.toDp() }
                         Row(
                             Modifier
@@ -204,7 +236,8 @@ private fun AnimeDetails(
 
                                     SubtitlePrimary(text = "Episodes")
                                     SubtitleSecondary(
-                                        text = "${details?.episodes ?: "-"}")
+                                        text = "${details?.episodes ?: "-"}"
+                                    )
 
 
                                     Spacer(Modifier.height(5.dp))
@@ -252,13 +285,116 @@ private fun AnimeDetails(
                             fontWeight = FontWeight.SemiBold
                         )
                         Spacer(Modifier.height(10.dp))
-                        ExpandableText(Modifier, text = details?.synopsis ?: "Unknown", textModifier = Modifier)
+                        ExpandableText(
+                            Modifier,
+                            text = details?.synopsis ?: "Unknown",
+                            textModifier = Modifier
+                        )
                     }
 
                 }
             }
         }
     }
+}
+
+@OptIn(UnstableApi::class)
+@Composable
+fun PosterView(
+    details: Data?, hasTrailer: Boolean, exoPlayer: ExoPlayer,
+    onHeightMeasured: (Float) -> Unit
+) {
+
+    val scope = rememberCoroutineScope()
+    var videoId by remember { mutableStateOf(extractYoutubeId(details?.trailer?.embedUrl))}
+
+    val modifier = Modifier
+        .onGloballyPositioned { coords ->
+            onHeightMeasured(coords.size.height.toFloat())
+        }
+
+    if (videoId != null) {
+        AndroidView(
+            factory = { ctx ->
+                YouTubePlayerView(ctx).apply {
+                    addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+                        override fun onReady(youTubePlayer: YouTubePlayer) {
+                            youTubePlayer.mute()
+                            videoId?.let {
+                                youTubePlayer.loadVideo(it, 0f)
+                            }
+                        }
+
+                        override fun onError(
+                            youTubePlayer: YouTubePlayer,
+                            error: PlayerConstants.PlayerError
+                        ) {
+                            super.onError(youTubePlayer, error)
+                            scope.launch {
+                                delay(1000L)
+                                videoId = null
+                            }
+                        }
+                    })
+                }
+            },
+            modifier = modifier
+                .fillMaxWidth()
+                .aspectRatio(3f / 2f)
+                .graphicsLayer {
+                renderEffect = BlurEffect(5f, 5f) // Keeps your blur effect
+                alpha = 0.9f
+            }
+        )
+//        AndroidView(
+//            factory = { ctx ->
+//                PlayerView(ctx).apply {
+//                    player = exoPlayer
+//                    useController = false // Hide play/pause buttons
+//                    resizeMode = AspectRatioFrameLayout.RESIZE_MODE_ZOOM
+//                }
+//            },
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .aspectRatio(3f / 2f)
+//                .graphicsLayer {
+//                    alpha = 0.9f
+//                    renderEffect = BlurEffect(5f, 5f) // Keeps your blur effect
+//                }
+//                .onGloballyPositioned { coords ->
+//                    onHeightMeasured(coords.boundsInParent().height)
+//                }
+//        )
+    } else {
+        GlideImage(
+            modifier = modifier
+                .fillMaxWidth()
+                .aspectRatio(3f / 2f)
+                .graphicsLayer {
+                    alpha = 0.9f
+                    scaleX = 1f
+                    scaleY = 1f
+                    translationX = 0f
+                    translationY = 0f
+                    shadowElevation = 10f
+                    ambientShadowColor = Color.Black
+                    spotShadowColor = Color.Black
+                    renderEffect = BlurEffect(5f, 5f)
+                }/*
+                .onGloballyPositioned { coords ->
+                    onHeightMeasured(coords.boundsInParent().height)
+                }*/,
+            imageModel = { details?.images?.jpg?.imageUrl },
+            imageOptions = ImageOptions(
+                contentScale = ContentScale.Crop
+            )
+        )
+    }
+}
+
+
+fun extractYoutubeId(url: String?): String? {
+    return url?.substringAfter("embed/")?.substringBefore("?")
 }
 
 

@@ -92,10 +92,18 @@ dependencies {
     implementation(libs.okHttp)
 
     // Landscapist Glide for Compose
-    implementation("com.github.skydoves:landscapist-glide:2.3.2")
+    implementation(libs.landscapist.glide)
 
     // For the Shimmer effect
-    implementation("com.github.skydoves:landscapist-placeholder:2.3.2")
+    implementation(libs.landscapist.placeholder)
+
+    //Exo Player
+    implementation(libs.androidx.media3.exoplayer)
+    implementation(libs.androidx.media3.ui)
+
+    implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
+
+
 
 
 }
