@@ -10,14 +10,13 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AnimeDao {
-    // List Operations
+
     @Query("SELECT * FROM anime_list")
     fun getAnimeList(): Flow<List<AnimeEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAnimeList(animeList: List<AnimeEntity>)
 
-    // Details Operations
     @Query("SELECT * FROM anime_details WHERE malId = :id")
     fun getAnimeDetails(id: Int): Flow<AnimeDetailsEntity?>
 

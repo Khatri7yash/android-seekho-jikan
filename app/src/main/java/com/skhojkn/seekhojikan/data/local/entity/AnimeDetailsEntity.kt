@@ -9,7 +9,9 @@ data class AnimeDetailsEntity(
     val title: String,
     val synopsis: String?,
     val duration: String?,
+    val episodes: Int?,
     val trailerUrl: String?,
+    val imageUrl: String?,
     val favorites: Int?,
     val score: Double?
 )

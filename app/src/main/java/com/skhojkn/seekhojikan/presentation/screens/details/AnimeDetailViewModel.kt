@@ -1,6 +1,7 @@
 package com.skhojkn.seekhojikan.presentation.screens.details
 
 import androidx.lifecycle.ViewModel
+import com.skhojkn.seekhojikan.data.local.entity.AnimeDetailsEntity
 import com.skhojkn.seekhojikan.domain.model.AnimeDetails
 import com.skhojkn.seekhojikan.domain.usecase.AnimeDetailsUseCase
 import com.skhojkn.seekhojikan.domain.usecase.network.Result
@@ -15,8 +16,8 @@ class AnimeDetailViewModel @Inject constructor(
     val detailsUseCase: AnimeDetailsUseCase
 ) : ViewModel() {
 
-    private val _animeDetail = MutableStateFlow<Result<AnimeDetails>>(Result.Loading)
-    val animeDetail : StateFlow<Result<AnimeDetails>> = _animeDetail.asStateFlow()
+    private val _animeDetail = MutableStateFlow<Result<AnimeDetailsEntity>>(Result.Loading)
+    val animeDetail : StateFlow<Result<AnimeDetailsEntity>> = _animeDetail.asStateFlow()
 
     suspend fun fetchAnimeDetails(animeId: Int){
         detailsUseCase(animeId.toString()).collect {

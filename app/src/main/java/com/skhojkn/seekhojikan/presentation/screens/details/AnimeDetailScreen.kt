@@ -64,6 +64,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstan
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+import com.skhojkn.seekhojikan.data.local.entity.AnimeDetailsEntity
 import com.skhojkn.seekhojikan.domain.model.Data
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -88,7 +89,7 @@ fun AnimeDetailsScreen(animeID: Int, navigation: (Screen?, Array<out Any>?) -> U
 
 @Composable
 private fun AnimeDetails(
-    animeDetailsState: Result<AnimeDetails>,
+    animeDetailsState: Result<AnimeDetailsEntity>,
     navigation: (Screen?, Array<out Any>?) -> Unit = { nav, arr ->
     }
 ) {
@@ -104,7 +105,7 @@ private fun AnimeDetails(
     ) {
         BaseColumn(state = animeDetailsState) {
             if (animeDetailsState is Result.Success) {
-                val details = animeDetailsState.data.data
+                val details = animeDetailsState.data
                 Column(
                     modifier =
                         Modifier
@@ -139,7 +140,7 @@ private fun AnimeDetails(
                                     .onGloballyPositioned({ cord ->
                                         posterWidth = cord.size.width.toFloat()
                                     }),
-                                imageModel = { details?.images?.jpg?.imageUrl },
+                                imageModel = { details.imageUrl },
                                 imageOptions = ImageOptions(
                                     contentScale = ContentScale.Crop,
                                 ),
@@ -176,7 +177,7 @@ private fun AnimeDetails(
                                         animationMode = MarqueeAnimationMode.Immediately,
                                         velocity = 50.dp
                                     ),
-                                text = details?.titleEnglish ?: "Unknown",
+                                text = details.title ,
                                 color = MaterialTheme.colorScheme.primary,
                                 style = MaterialTheme.typography.headlineSmall,
                                 fontWeight = FontWeight.Bold,
@@ -193,7 +194,7 @@ private fun AnimeDetails(
 
                                     SubtitlePrimary(text = "Episodes")
                                     SubtitleSecondary(
-                                        text = "${details?.episodes ?: "-"}"
+                                        text = "${details.episodes ?: "-"}"
                                     )
 
 
@@ -257,12 +258,12 @@ private fun AnimeDetails(
 
 @Composable
 fun PosterView(
-    details: Data?,
+    details: AnimeDetailsEntity?,
     onHeightMeasured: (Float) -> Unit
 ) {
 
     val scope = rememberCoroutineScope()
-    var videoId by remember { mutableStateOf(extractYoutubeId(details?.trailer?.embedUrl))}
+    var videoId by remember { mutableStateOf(extractYoutubeId(details?.trailerUrl))}
 
     val modifier = Modifier
         .onGloballyPositioned { coords ->
@@ -318,7 +319,7 @@ fun PosterView(
                     spotShadowColor = Color.Black
                     renderEffect = BlurEffect(5f, 5f)
                 },
-            imageModel = { details?.images?.jpg?.imageUrl },
+            imageModel = { details?.imageUrl },
             imageOptions = ImageOptions(
                 contentScale = ContentScale.Crop
             )
