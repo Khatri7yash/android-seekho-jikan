@@ -53,6 +53,9 @@ import com.skhojkn.seekhojikan.presentation.common.textui.ExpandableText
 import com.skhojkn.seekhojikan.presentation.common.textui.SubtitlePrimary
 import com.skhojkn.seekhojikan.presentation.common.textui.SubtitleSecondary
 import com.skhojkn.seekhojikan.presentation.navigation.Screen
+import com.skhojkn.seekhojikan.presentation.theme.Purple40
+import com.skhojkn.seekhojikan.presentation.theme.pinkColor
+import com.skhojkn.seekhojikan.presentation.theme.starColor
 import com.skhojkn.seekhojikan.presentation.utils.annotation.ThemePreview
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.components.rememberImageComponent
@@ -198,16 +201,20 @@ private fun AnimeDetails(
                                     Modifier.weight(1f),
                                     horizontalAlignment = Alignment.Start
                                 ) {
-                                    SubtitlePrimary(
-                                        text = "${details?.episodes ?: "?"} Eps",
-//                                        style = MaterialTheme.typography.bodySmall,
-                                        color = Color.White.copy(alpha = 0.8f))
+
+                                    SubtitlePrimary(text = "Episodes")
+                                    SubtitleSecondary(
+                                        text = "${details?.episodes ?: "-"}")
 
 
                                     Spacer(Modifier.height(5.dp))
 
-                                    SubtitlePrimary(text = "year")
-                                    SubtitleSecondary(text = details?.year.toString())
+                                    SubtitlePrimary(text = "Favorites")
+                                    Text(
+                                        text = "♥ ${details?.favorites ?: "N/A"}",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = pinkColor
+                                    )
 
                                 }
 
@@ -215,8 +222,8 @@ private fun AnimeDetails(
                                     Modifier.weight(1f),
                                     horizontalAlignment = Alignment.Start
                                 ) {
-                                    SubtitlePrimary(text = "duration")
-                                    SubtitleSecondary(text = details?.duration ?: "Unknown")
+                                    SubtitlePrimary(text = "Duration")
+                                    SubtitleSecondary(text = details?.duration ?: "-")
 
                                     Spacer(Modifier.height(5.dp))
 
@@ -224,7 +231,7 @@ private fun AnimeDetails(
                                     Text(
                                         text = "★ ${details?.score ?: "N/A"}",
                                         style = MaterialTheme.typography.bodySmall,
-                                        color = Color.Yellow
+                                        color = starColor
                                     )
 
                                 }
