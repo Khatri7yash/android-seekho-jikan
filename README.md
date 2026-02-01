@@ -1,4 +1,5 @@
-#Seekho-Jikan
+# Seekho-Jikan
+
 ### A Production-Perfect Android Anime Application
 
 Seekho-Jikan is a power-packed, resilient Android application that serves as a premium gateway to the world of Anime using the Jikan API.  
