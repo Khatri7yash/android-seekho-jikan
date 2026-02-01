@@ -59,6 +59,7 @@ Unlike standard apps that fail without a signal, Seekho-Jikan uses a robust **Ne
 
 ### Tech Stack
 
+- **Language:** Kotlin
 - **UI:** Jetpack Compose (Material 3)
 - **Architecture:** Clean Architecture + Use Cases + MVVM
 - **DI:** Hilt
@@ -67,6 +68,7 @@ Unlike standard apps that fail without a signal, Seekho-Jikan uses a robust **Ne
 - **Media:** YouTube IFrame Player API
 - **Image Loading:** Glide / Landscapist (Shimmer & Blur support)
 - **Reactive Streams:** Kotlin StateFlow
+- **Compose Navigation:** Implemented using a centralized navigation graph for scalable and maintainable screen transitions.
 
 ---
 
@@ -124,6 +126,9 @@ Unlike standard apps that fail without a signal, Seekho-Jikan uses a robust **Ne
 
 - **TDD Approach:**
   Test-Driven Development (TDD) was not followed due to time constraints for this assignment.
+
+- **Navigation Drawer:**
+  Navigation Drawer's gesture is kept disabled right now.
 
 - **Pagination:**
   Pagination is not implemented as it was not part of the given task.  
