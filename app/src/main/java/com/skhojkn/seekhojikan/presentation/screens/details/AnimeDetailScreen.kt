@@ -23,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,8 +45,6 @@ import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.skhojkn.seekhojikan.domain.model.AnimeDetails
-import com.skhojkn.seekhojikan.domain.usecase.network.Result
 import com.skhojkn.seekhojikan.presentation.common.BaseColumn
 import com.skhojkn.seekhojikan.presentation.common.BaseScreen
 import com.skhojkn.seekhojikan.presentation.common.textui.ExpandableText
@@ -65,7 +64,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import com.skhojkn.seekhojikan.data.local.entity.AnimeDetailsEntity
-import com.skhojkn.seekhojikan.domain.model.Data
+import com.skhojkn.seekhojikan.domain.usecase.network.Result
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -75,6 +74,7 @@ fun AnimeDetailsScreen(animeID: Int, navigation: (Screen?, Array<out Any>?) -> U
 
     val viewModel = hiltViewModel<AnimeDetailViewModel>()
     val animeDetailsState by viewModel.animeDetail.collectAsState()
+    val scope = rememberCoroutineScope()
 
     LaunchedEffect(animeID) {
         viewModel.fetchAnimeDetails(animeID)
@@ -82,6 +82,11 @@ fun AnimeDetailsScreen(animeID: Int, navigation: (Screen?, Array<out Any>?) -> U
 
     AnimeDetails(
         animeDetailsState = animeDetailsState,
+        onRetry = {
+            scope.launch {
+                viewModel.fetchAnimeDetails(animeID)
+            }
+        },
         navigation = navigation
     )
 }
@@ -90,6 +95,7 @@ fun AnimeDetailsScreen(animeID: Int, navigation: (Screen?, Array<out Any>?) -> U
 @Composable
 private fun AnimeDetails(
     animeDetailsState: Result<AnimeDetailsEntity>,
+    onRetry: () -> Unit = {},
     navigation: (Screen?, Array<out Any>?) -> Unit = { nav, arr ->
     }
 ) {
@@ -101,6 +107,8 @@ private fun AnimeDetails(
 
     BaseScreen(
         title = title,
+        isEmpty = (animeDetailsState !is Result.Loading && animeDetailsState !is Result.Success),
+        onRetry = onRetry,
         navigation = navigation
     ) {
         BaseColumn(state = animeDetailsState) {
@@ -177,7 +185,7 @@ private fun AnimeDetails(
                                         animationMode = MarqueeAnimationMode.Immediately,
                                         velocity = 50.dp
                                     ),
-                                text = details.title ,
+                                text = details.title,
                                 color = MaterialTheme.colorScheme.primary,
                                 style = MaterialTheme.typography.headlineSmall,
                                 fontWeight = FontWeight.Bold,
@@ -263,7 +271,7 @@ fun PosterView(
 ) {
 
     val scope = rememberCoroutineScope()
-    var videoId by remember { mutableStateOf(extractYoutubeId(details?.trailerUrl))}
+    var videoId by remember { mutableStateOf(extractYoutubeId(details?.trailerUrl)) }
 
     val modifier = Modifier
         .onGloballyPositioned { coords ->
@@ -299,9 +307,9 @@ fun PosterView(
                 .fillMaxWidth()
                 .aspectRatio(3f / 2f)
                 .graphicsLayer {
-                renderEffect = BlurEffect(5f, 5f)
-                alpha = 0.9f
-            }
+                    renderEffect = BlurEffect(5f, 5f)
+                    alpha = 0.9f
+                }
         )
     } else {
         GlideImage(

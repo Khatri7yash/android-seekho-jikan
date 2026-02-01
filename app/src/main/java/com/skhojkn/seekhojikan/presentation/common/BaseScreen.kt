@@ -41,6 +41,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -67,6 +68,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun BaseScreen(
     title: String,
+    isEmpty: Boolean = false,
+    onRetry: () -> Unit = {},
     navigation: (Screen?, Array<out Any>?) -> Unit,
     content: @Composable (() -> Unit)
 ) {
@@ -74,6 +77,7 @@ fun BaseScreen(
     val connection by connectivityState()
 //    val isConnected = connection == ConnectionState.Available
     var selectedItem by rememberSaveable { mutableIntStateOf(0) }
+    var canAutoRefresh by rememberSaveable { mutableStateOf(false) }
     val drawerItems = listOf("Home", "Profile", "Settings")
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -134,9 +138,13 @@ fun BaseScreen(
                 },
                 snackbarHost = {
                     if (connection == ConnectionState.Unavailable) {
+                        canAutoRefresh = true
                         Snackbar(modifier = Modifier.padding(8.dp)) {
                             Text(stringResource(R.string.no_internet))
                         }
+                    }else if(canAutoRefresh) {
+                        onRetry.invoke()
+                        canAutoRefresh = false
                     }
                 }) { innerPadding ->
                 Surface(
@@ -145,7 +153,14 @@ fun BaseScreen(
                         .padding(innerPadding),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    content()
+                    if (connection == ConnectionState.Unavailable && isEmpty) {
+                        NoDataView(onRetry = {
+                            canAutoRefresh = false
+                            onRetry()
+                        })
+                    } else {
+                        content()
+                    }
                 }
             }
         }
@@ -237,7 +252,9 @@ private fun NavigationDrawer(
                                             )
                                         }
                                     },
-                                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding).testTag(item)
+                                    modifier = Modifier
+                                        .padding(NavigationDrawerItemDefaults.ItemPadding)
+                                        .testTag(item)
                                 )
                             }
                         }
