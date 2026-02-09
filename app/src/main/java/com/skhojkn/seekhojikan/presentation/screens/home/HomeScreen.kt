@@ -23,20 +23,16 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun MainScreen(navigation: (Screen?, Array<out Any>?) -> Unit) {
-    val viewModel = hiltViewModel<HomeScreenViewModel>()
+fun MainScreen(
+    viewModel: HomeScreenViewModel = hiltViewModel<HomeScreenViewModel>(),
+    navigation: (Screen?, Array<out Any>?) -> Unit) {
+
     val uiState by viewModel.uiState.collectAsState()
-    var itemList: List<AnimeEntity?> by remember { mutableStateOf<List<AnimeEntity?>>(emptyList()) }
+    val itemList by viewModel.animeList.collectAsState()
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
         viewModel.getTopAnime()
-    }
-
-    LaunchedEffect(uiState) {
-        if (uiState is Result.Success) {
-            itemList = (uiState as Result.Success).data
-        }
     }
 
     HomeContentScreen(

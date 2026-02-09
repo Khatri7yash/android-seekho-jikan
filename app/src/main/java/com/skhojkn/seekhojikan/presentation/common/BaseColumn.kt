@@ -20,16 +20,10 @@ import com.skhojkn.seekhojikan.domain.usecase.network.Result
 
 @Composable
 fun <R> BaseColumn(
-    state: Result<R>,
+    uiState: Result<R>,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
-    var uiState by remember { mutableStateOf<Result<R>>(state) }
-
-    // Update errorState whenever errorMessage changes
-    LaunchedEffect(state) {
-        uiState = state
-    }
     Column(
         modifier = modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -45,10 +39,7 @@ fun <R> BaseColumn(
             }
 
             is Result.Error -> {
-                ErrorAlert(errorMessage = (uiState as Result.Error).exceptionMessage) {
-                    // Clear the error state when the "OK" button is clicked
-                    uiState = Result.Loading
-                }
+                ErrorAlert(errorMessage = (uiState as Result.Error).exceptionMessage) {}
             }
         }
     }
