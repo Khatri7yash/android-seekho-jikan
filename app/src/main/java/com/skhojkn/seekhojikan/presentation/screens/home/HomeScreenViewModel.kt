@@ -29,10 +29,18 @@ class HomeScreenViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<Result<List<AnimeEntity?>>>(Result.Loading)
     val uiState: StateFlow<Result<List<AnimeEntity?>>> = _uiState.asStateFlow()
 
+    private val _animeList = MutableStateFlow<List<AnimeEntity?>>(arrayListOf())
+    val animeList = _animeList.asStateFlow()
+
+
+
     suspend fun getTopAnime(): StateFlow<Result<Any>> = suspendCoroutine { continuation ->
         viewModelScope.launch {
             topAnimeListUseCase(null).collect {
                 _uiState.value = it
+                if (it is Result.Success) {
+                    _animeList.value = it.data
+                }
             }
         }
     }

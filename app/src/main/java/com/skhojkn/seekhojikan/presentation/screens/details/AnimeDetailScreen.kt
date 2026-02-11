@@ -111,7 +111,7 @@ private fun AnimeDetails(
         onRetry = onRetry,
         navigation = navigation
     ) {
-        BaseColumn(state = animeDetailsState) {
+        BaseColumn(uiState = animeDetailsState) {
             if (animeDetailsState is Result.Success) {
                 val details = animeDetailsState.data
                 Column(
