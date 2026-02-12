@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.rounded.AccountBox
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material.icons.rounded.Person
@@ -76,15 +77,13 @@ fun BaseScreen(
     val route = LocalCurrentRoute.current
     val connection by connectivityState()
 //    val isConnected = connection == ConnectionState.Available
-    var selectedItem by rememberSaveable { mutableIntStateOf(0) }
     var canAutoRefresh by rememberSaveable { mutableStateOf(false) }
-    val drawerItems = listOf("Home", "Profile", "Settings")
+    val drawerItems = listOf("Home", "Profile", "Settings", "Payment")
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
     SeekhoJikanTheme {
         NavigationDrawer(
-            selected = selectedItem,
             navigation = navigation,
             scope,
             drawerState,
@@ -170,22 +169,21 @@ fun BaseScreen(
 
 @Composable
 private fun NavigationDrawer(
-    selected: Int,
     navigation: (Screen?, Array<out Any>?) -> Unit,
     scope: CoroutineScope,
     drawerState: DrawerState,
     drawerItems: List<String>,
     content: @Composable () -> Unit
 ) {
-    var selectedItem by rememberSaveable { mutableIntStateOf(selected) }
-
-    LaunchedEffect(selected) {
-        selectedItem = selected
+    var selectedItem by rememberSaveable { mutableIntStateOf(0) }
+    val currentScreen = LocalCurrentRoute.current
+    LaunchedEffect(currentScreen) {
+        selectedItem = drawerItems.indexOf(currentScreen)
     }
 
     ModalNavigationDrawer(
         drawerState = drawerState,
-        gesturesEnabled = false,
+        gesturesEnabled = enableGesture(currentScreen),
         drawerContent = {
             ModalDrawerSheet {
                 Column(
@@ -236,6 +234,7 @@ private fun NavigationDrawer(
                                                 when (item) {
                                                     "Home" -> Icons.Rounded.Home
                                                     "Settings" -> Icons.Rounded.Settings
+                                                    "Payment" -> Icons.Rounded.AccountBox
                                                     else -> Icons.Rounded.Person
                                                 },
                                             contentDescription = item
@@ -267,11 +266,18 @@ private fun NavigationDrawer(
     }
 }
 
+fun enableGesture(currentScreen: String?): Boolean {
+    return currentScreen?.let { it == Screen.HomeScreen.route } ?: run { false }
+}
+
 
 private fun manageNavigation(
     identifier: String,
     navigation: (Screen?, Array<Any>?) -> Unit
 ) {
+    when (identifier) {
+        "Payment" -> navigation(Screen.PaymentModes, null)
+    }
 
 }
 

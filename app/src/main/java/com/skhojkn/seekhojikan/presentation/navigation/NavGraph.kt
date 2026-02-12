@@ -11,6 +11,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.skhojkn.seekhojikan.presentation.screens.details.AnimeDetailsScreen
 import com.skhojkn.seekhojikan.presentation.screens.home.MainScreen
+import com.skhojkn.seekhojikan.presentation.screens.paymentmodes.PaymentModesScreen
 
 val LocalCurrentRoute = (compositionLocalOf<String?> { null })
 
@@ -26,7 +27,11 @@ fun Navigation() {
             navController = navController,
             startDestination = Screen.HomeScreen.route
         ) {
-
+            composable(route = Screen.PaymentModes.route) {
+                PaymentModesScreen{ navigation, args ->
+                    navController navigateRoute (NavigationData(navigation, args))
+                }
+            }
             composable(Screen.HomeScreen.route) {
                 MainScreen { navigation, args ->
                     navController navigateRoute (NavigationData(navigation, args))

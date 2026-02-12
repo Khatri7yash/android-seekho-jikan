@@ -11,6 +11,7 @@ sealed class Screen(
 ) {
 
     object HomeScreen : Screen(route = "Home", title = "Anime")
+    object PaymentModes : Screen(route = "PaymentModes", title = "Payment Modes")
     object AnimeDetailsScreen: Screen(
     route = "AnimeDetails",
     title = "Anime Details",
